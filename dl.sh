@@ -11,9 +11,9 @@ if [ ! -d "$HOME/.pyenv" ]; then
     # 请根据您的操作系统和偏好选择适当的安装方法
     echo "正在安装pyenv..."
     git clone https://github.com/pyenv/pyenv.git ~/.pyenv
-    echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.zshrc
-    echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zshrc
-    echo 'eval "$(pyenv init -)"' >> ~/.zshrc 
+	echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.zshrc
+	echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zshrc'
+	echo 'eval "$(pyenv init -)"' >> ~/.zshrc
     echo "安装完成。"
   else
     echo "没有安装pyenv。"
@@ -67,7 +67,6 @@ poetry init -n --author "$USER" --python "^$v"
 wget "https://registry.npmmirror.com/binary.html?path=python/$v/Python-$v.tar.xz" -O ~/.pyenv/cache/Python-$v.tar.xz
 pyenv install $v 
 pyenv local $v    # 设置项目的 Python 版本
-
 
 # 定义目录结构
 structure=(
