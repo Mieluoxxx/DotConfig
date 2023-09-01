@@ -67,7 +67,7 @@ poetry init -n --author "$USER" --python "^$v"
 wget "https://registry.npmmirror.com/binary.html?path=python/$v/Python-$v.tar.xz" -O ~/.pyenv/cache/Python-$v.tar.xz
 pyenv install $v 
 pyenv local $v    # 设置项目的 Python 版本
-source ~/.zshrc
+zsh
 
 # 定义目录结构
 structure=(
