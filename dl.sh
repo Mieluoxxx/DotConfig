@@ -1,5 +1,26 @@
 #!/bin/bash
 
+# 检查pyenv是否已安装
+if [ ! -d "$HOME/.pyenv" ]; then
+  # 询问是否安装
+  read -p "检测到未安装pyenv，是否安装pyenv？[Y/n]" ans
+  ans=${ans:-Y} # 默认为Y
+
+  if [ "$ans" = "Y" ] || [ "$ans" = "y" ]; then
+    # 执行安装pyenv的命令
+    # 请根据您的操作系统和偏好选择适当的安装方法
+    echo "正在安装pyenv..."
+    git clone https://github.com/pyenv/pyenv.git ~/.pyenv
+    echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.zshrc
+    echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zshrc
+    echo 'eval "$(pyenv init -)"' >> ~/.zshrc 
+    echo "安装完成。"
+  else
+    echo "没有安装pyenv。"
+  fi
+fi
+
+
 # 检查poetry是否安装
 if ! command -v poetry &> /dev/null; then
 
@@ -17,13 +38,36 @@ if ! command -v poetry &> /dev/null; then
   fi
 fi
 
+
 # 检查传入参数
 if [ $# -ne 1 ]; then
   echo "Usage: $0 <project_name>"
   exit 1
 fi
-
 project_name=$1
+
+
+# 生成项目目录
+mkdir $project_name
+cd $project_name
+
+
+# 初始化poetry
+read -p "请输入Python版本(例如 3.11.4):" v
+
+# 检查用户是否提供了Python版本，如果没有，则获取当前环境的Python版本
+if [ -z "$v" ]; then
+  v=$(python --version 2>&1 | awk '{print $2}')
+fi
+
+# 使用Poetry初始化项目
+poetry init -n --author "$USER" --python "^$v"
+
+# 创建并激活项目目录的 pyenv 环境
+wget "https://registry.npmmirror.com/binary.html?path=python/$v/Python-$v.tar.xz" -O ~/.pyenv/cache/Python-$v.tar.xz
+pyenv install $v 
+pyenv local $v    # 设置项目的 Python 版本
+
 
 # 定义目录结构
 structure=(
@@ -40,16 +84,6 @@ structure=(
   "logs/"
   "results/"  
 )
-
-# 生成项目目录
-mkdir $project_name
-cd $project_name
-
-
-# 初始化poetry
-poetry init
-
-
 for item in ${structure[@]}; do
   if [[ $item == *"/"* ]]; then
     # 包含/,生成目录
@@ -103,5 +137,9 @@ select framework in "机器学习" "Tensorflow" "PyTorch" "Jax"; do
   esac
   break
 done
+
+
+# 在项目中创建虚拟环境并安装依赖
+poetry install
 
 echo "Project $project_name generated successfully!"
