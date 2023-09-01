@@ -12,8 +12,8 @@ if [ ! -d "$HOME/.pyenv" ]; then
     echo "正在安装pyenv..."
     git clone https://github.com/pyenv/pyenv.git ~/.pyenv
 	echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.zshrc
-	echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zshrc'
-	echo 'eval "$(pyenv init -)"' >> ~/.zshrc'
+	echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zshrc
+	echo 'eval "$(pyenv init -)"' >> ~/.zshrc
     echo "安装完成。"
   else
     echo "没有安装pyenv。"
