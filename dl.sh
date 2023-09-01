@@ -67,6 +67,7 @@ poetry init -n --author "$USER" --python "^$v"
 wget "https://registry.npmmirror.com/binary.html?path=python/$v/Python-$v.tar.xz" -O ~/.pyenv/cache/Python-$v.tar.xz
 pyenv install $v 
 pyenv local $v    # 设置项目的 Python 版本
+source ~/.zshrc
 
 # 定义目录结构
 structure=(
@@ -123,22 +124,24 @@ select framework in "机器学习" "Tensorflow" "PyTorch" "Jax"; do
     "Tensorflow")
       # 安装TensorFlow
       read -p "请选择Tensorflow版本(2.6或最新):" tf_version
-	  poetry add tensorflow
+	  poetry add pandas matplotlib tensorflow
       ;;  
     "PyTorch")
       # 安装PyTorch
 	  read -p "请选择PyTorch版本(推荐1.13.1或2.0.1):" torch_version
-	    poetry add torch
+	    poetry add pandas matplotlib torch
       ;;
     "Jax")
       # 安装Jax
+      poetry add jax
       ;;
   esac
   break
 done
 
 
-# 在项目中创建虚拟环境并安装依赖
+# 在项目中创建虚拟环境并安装依赖(二次保证自己想要的Python版本)
+poetry env use $v
 poetry install
 
 echo "Project $project_name generated successfully!"
