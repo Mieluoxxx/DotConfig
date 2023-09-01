@@ -7,4 +7,4 @@
 - 一键生成深度学习模板，让项目更有规范（
 
 缺点:
-- Pyenv重新构建Python环境巨慢，md真不如conda
+- Pyenv重新构建Python环境巨慢，md真不如conda（如果本身~/.pyenv/cache中含有特定3.x的版本，构建速度效率会远超conda）
