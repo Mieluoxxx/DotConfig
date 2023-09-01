@@ -10,7 +10,7 @@ if [ ! -d "$HOME/.pyenv" ]; then
     # 执行安装pyenv的命令
     # 请根据您的操作系统和偏好选择适当的安装方法
     echo "正在安装pyenv..."
-    git clone https://github.com/pyenv/pyenv.git ~/.pyenv
+    git clone https://gitee.com/mirrors/pyenv.git ~/.pyenv
 	echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.zshrc
 	echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zshrc
 	echo 'eval "$(pyenv init -)"' >> ~/.zshrc
@@ -31,7 +31,8 @@ if ! command -v poetry &> /dev/null; then
   if [ "$ans" = "Y" ] || [ "$ans" = "y" ]; then
     # 执行安装poetry的命令
     pip install poetry
-	poetry config virtualenvs.in-project true
+    poetry config virtualenvs.in-project true
+    poetry source add --priority=default mirrors https://pypi.tuna.tsinghua.edu.cn/simple/
   else
     echo "未安装poetry，脚本退出。"
     exit 1
@@ -67,7 +68,7 @@ poetry init -n --author "$USER" --python "^$v"
 wget "https://registry.npmmirror.com/binary.html?path=python/$v/Python-$v.tar.xz" -O ~/.pyenv/cache/Python-$v.tar.xz
 pyenv install $v 
 pyenv local $v    # 设置项目的 Python 版本
-zsh
+poetry env use $v
 
 # 定义目录结构
 structure=(
@@ -115,21 +116,38 @@ echo "
 
 # 选择项目框架
 echo "请选择项目框架:"
-select framework in "机器学习" "Tensorflow" "PyTorch" "Jax"; do
+select framework in "Machine Learning" "Tensorflow" "Tensorflow-macos" "PyTorch" "Jax"; do
   case $framework in
-    "机器学习")
+    "Machine Learning")
       # 安装scikit-learn等机器学习包
-	  poetry add pandas matplotlib scikit-learn
+      poetry add pandas matplotlib scikit-learn
       ;;
     "Tensorflow")
       # 安装TensorFlow
-      read -p "请选择Tensorflow版本(2.6或最新):" tf_version
-	  poetry add pandas matplotlib tensorflow
+      read -p "请选择Tensorflow版本（默认为最新，如果安装老版本请首先确定Python版本与Cuda版本再填写）:" tf_version
+      if [ -z "$tf_version" ]; then
+        poetry add pandas matplotlib tensorflow
+      else
+        poetry add pandas matplotlib "tensorflow@$tf_version"
+      fi
+      ;;  
+      "Tensorflow-macos")
+      # 安装TensorFlow-macos
+      read -p "此为MacOS M系列独有的Tensorflow版本，使用前请先去官网确认MacOS版本与Python版本：" tf_mac
+      if [ -z "$tf_mac" ]; then
+        poetry add pandas matplotlib tensorflow_macos
+      else
+        poetry add pandas matplotlib "tensorflow_macos@$tf_mac"
+      fi
       ;;  
     "PyTorch")
       # 安装PyTorch
-	  read -p "请选择PyTorch版本(推荐1.13.1或2.0.1):" torch_version
-	    poetry add pandas matplotlib torch
+      read -p "请选择PyTorch版本（默认为最新，如果安装老版本请首先确定Python版本与Cuda版本再填写）:" torch_version
+      if [ -z "$torch_version" ]; then
+        poetry add pandas matplotlib torch
+      else
+        poetry add pandas matplotlib torch@$torch_version
+      fi
       ;;
     "Jax")
       # 安装Jax
@@ -139,9 +157,12 @@ select framework in "机器学习" "Tensorflow" "PyTorch" "Jax"; do
   break
 done
 
+# 是否需要安装Jupyter
+read -p "是否需要安装Jupyter？(Y/N): " install_jupyter
 
-# 在项目中创建虚拟环境并安装依赖(二次保证自己想要的Python版本)
-poetry env use $v
-poetry install
+if [ "$install_jupyter" == "Y" ]; then
+    # 添加Jupyter到项目依赖
+    poetry add jupyter
+fi
 
 echo "Project $project_name generated successfully!"
