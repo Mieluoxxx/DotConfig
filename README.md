@@ -18,5 +18,6 @@
 缺点：
 - 对/etc/profile.d/clash.sh 进行了 777 处理，对个人使用而言影响不大
 - 将clash-for-linux本体放置在了~/Apps/文件夹中，个人习惯问题
+
 参考地址:
 [clash-for-linux](https://github.com/wanhebin/clash-for-linux)
