@@ -11,7 +11,7 @@
 - 感觉不如docker
 ---
 
-## [proxy-for-linux.sh](https://github.com/Mieluoxxx/DotConfig/blob/main/proxy-for-linux.sh) 一键为linux配置clash代理
+## [proxy-for-linux.sh](https://github.com/Mieluoxxx/DotConfig/blob/main/proxy-for-linux.sh) 一键为linux/wsl2配置clash代理
 优点：
 - 全程国内加速
 - 操作简单
@@ -21,3 +21,9 @@
 
 参考地址:
 [clash-for-linux](https://github.com/wanhebin/clash-for-linux)
+---
+## [proxy-wsl.sh](https://github.com/Mieluoxxx/DotConfig/blob/main/proxy-wsl.sh) 一键为wsl2配置clash代理，使用windows客户端
+优点：
+- 简单
+缺点：
+- 暂无
