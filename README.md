@@ -27,5 +27,6 @@
 ## [proxy-wsl.sh](https://github.com/Mieluoxxx/DotConfig/blob/main/proxy-wsl.sh) 一键为wsl2配置clash代理，使用windows客户端
 优点：
 - 简单
+
 缺点：
 - 暂无
